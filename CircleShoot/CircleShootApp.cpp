@@ -100,17 +100,17 @@ void CircleShootApp::Init()
     mMaxPlays = GetInteger("MaxPlays", 0);
     mMaxTime = GetInteger("MaxTime", 60);
 
-/*#ifdef _WIN32
-    mLastSongSwitchTime = GetTickCount() - 100000;
-    gMainThreadId = (int)GetCurrentThreadId();
-#else
-#ifdef _POSIX*/
+//#ifdef _WIN32
+//    mLastSongSwitchTime = GetTickCount() - 100000;
+//    gMainThreadId = (int)GetCurrentThreadId();
+//#else
+//#ifdef _POSIX
     // todo
     mLastSongSwitchTime = clock();
     gMainThreadId = (int)pthread_self();
-/*#endif
-#error Unimplemented on this platform.
-#endif*/
+//#endif
+//#error Unimplemented on this platform.
+//#endif
 
     gThreadRand.SRand(Sexy::Rand());
     gAppRand.SRand(Sexy::Rand());

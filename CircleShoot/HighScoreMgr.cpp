@@ -52,6 +52,9 @@ void HighScoreMgr::Load()
     if (!gSexyAppBase->ReadBufferFromFile("userdata/highscores.dat", &aBuffer))
     {
         AddDefaults();
+		HighScoreSet hss = mHighScoreMap["e_spiral"];
+		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: %d",(hss.begin())->mScore);
+		fflush(stdout);
         return;
     }
 

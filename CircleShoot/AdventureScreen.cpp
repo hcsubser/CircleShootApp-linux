@@ -287,6 +287,8 @@ void AdventureScreen::Draw(Graphics *g)
 		{
 			int aY = aScores * Sexy::FONT_MAIN8OUTLINE->GetLineSpacing() + 70;
 			aClipG.DrawString(Sexy::StrFormat("%d", aHighScoreItr->mScore), 575, aY);
+//			printf("(Debug)<CircleShoot/AdventureScreen.cpp> HighScore: %d",aHighScoreItr->mScore);
+//			fflush(stdout);
 		}
 
 		aClipG.ClipRect(0, 0, 567, 480);

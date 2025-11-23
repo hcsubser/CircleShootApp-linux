@@ -192,6 +192,8 @@ void PracticeScreen::Draw(Graphics *g)
 	g->DrawImage(Sexy::IMAGE_GAUNTSKY, aScroll + Sexy::IMAGE_GAUNTSKY->mWidth, 0);
 
 	g->DrawImage(mThumbnail, 170, 220);
+	if (mLocked)
+		g->DrawImage(mGradientImageLocked, 170, 220);
 	g->DrawImage(Sexy::IMAGE_GAUNTSCREEN, 0, 0);
 	g->DrawImage(Sexy::IMAGE_GAUNTTITLE, 0, 0);
 	g->DrawImage(Sexy::IMAGE_GAUNTHIGHSCORE, 434, 0);
@@ -296,6 +298,8 @@ void PracticeScreen::Draw(Graphics *g)
 				Sexy::StrFormat("%d", anItr->mScore),
 				575,
 				70 + Sexy::FONT_MAIN10OUTLINE->GetLineSpacing() * i);
+				printf("(Debug)<CircleShoot/PracticeScreen.cpp> HighScore: %d",anItr->mScore);
+				fflush(stdout);
 		}
 
 		sg.ClipRect(0, 0, 567, 480);
