@@ -37,7 +37,7 @@ PracticeScreen::PracticeScreen()
 	mSurvivalButton = MakeButton(6, this, "", CircleButton::CB_ClickSound, Sexy::IMAGE_GAUNTSURVIVALBUTTON, 3);
 
 	mThumbnail = NULL;
-	mScoreSet = new std::multiset<HighScore>();
+	//mScoreSet = new std::multiset<HighScore>();//Not needed ?
 	mGradientImageLocked = CreateGradientImage("LoCKED", 0x85);
 	mGradientImageQuestionMark = CreateGradientImage("?", 0xFF);
 
@@ -285,34 +285,36 @@ void PracticeScreen::Draw(Graphics *g)
 		break;
 	}
 
-	if (mScoreSet != NULL)
+	//if (mScoreSet != NULL)
+	//{
+	Graphics sg(*g);
+	sg.SetColor(Color(0x5B010A));
+	sg.SetFont(Sexy::FONT_MAIN10OUTLINE);
+
+	aText = mIsEndless ? ("e_"+mStage) : mStage;
+	HighScoreSet aScoreSet = GetCircleShootApp()->mHighScoreMgr->GetHighScores(aText);
+	mScoreSet = &aScoreSet;
+	//score
+	HighScoreSet::iterator anItr = mScoreSet->begin();
+	for (int i = 0; i != 3 && anItr != mScoreSet->end(); anItr++, i++)
 	{
-		Graphics sg(*g);
-		sg.SetColor(Color(0x5B010A));
-		sg.SetFont(Sexy::FONT_MAIN10OUTLINE);
-
-		HighScoreSet::iterator anItr = mScoreSet->begin();
-		for (int i = 0; i != 3 && anItr != mScoreSet->end(); anItr++, i++)
-		{
-			g->DrawString(
-				Sexy::StrFormat("%d", anItr->mScore),
-				575,
-				70 + Sexy::FONT_MAIN10OUTLINE->GetLineSpacing() * i);
-				printf("(Debug)<CircleShoot/PracticeScreen.cpp> HighScore: %d",anItr->mScore);
-				fflush(stdout);
-		}
-
-		sg.ClipRect(0, 0, 567, 480);
-
-		anItr = mScoreSet->begin();
-		for (int i = 0; i != 3 && anItr != mScoreSet->end(); anItr++, i++)
-		{
-			g->DrawString(
-				anItr->mName,
-				445,
-				70 + Sexy::FONT_MAIN10OUTLINE->GetLineSpacing() * i);
-		}
+		g->DrawString(
+			Sexy::StrFormat("%d", anItr->mScore),
+			575,
+			70 + Sexy::FONT_MAIN10OUTLINE->GetLineSpacing() * i);
 	}
+
+	sg.ClipRect(0, 0, 567, 480);
+	//name
+	anItr = mScoreSet->begin();
+	for (int i = 0; i != 3 && anItr != mScoreSet->end(); anItr++, i++)
+	{
+		g->DrawString(
+			anItr->mName,
+			445,
+			70 + Sexy::FONT_MAIN10OUTLINE->GetLineSpacing() * i);
+	}
+	//}
 
 	g->SetColor(Color(0x5B010A));
 	g->SetFont(Sexy::FONT_MAIN8OUTLINE);
