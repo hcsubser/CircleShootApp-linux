@@ -91,7 +91,7 @@ void UserProfile::DeleteUserFiles()
 
     gSexyAppBase->EraseFile(GetSaveGameName(false, mId));
     gSexyAppBase->EraseFile(GetSaveGameName(true, mId));
-    gSexyAppBase->EraseFile(Sexy::StrFormat("userdata/user%d.dat", mId));
+    gSexyAppBase->EraseFile(Sexy::StrFormat("%suserdata/user%d.dat", Sexy::GetAppDataFolder(), mId));
 }
 
 void UserProfile::LoadDetails()
@@ -100,7 +100,7 @@ void UserProfile::LoadDetails()
     Buffer aBuf;
 
     // yes, windows version used forward slashes
-    std::string aFileName = Sexy::StrFormat("userdata/user%d.dat", mId);
+    std::string aFileName = Sexy::StrFormat("%suserdata/user%d.dat", Sexy::GetAppDataFolder(), mId);
     if (gSexyAppBase->ReadBufferFromFile(aFileName, &aBuf))
     {
         DataReader aReader;
@@ -119,9 +119,9 @@ void UserProfile::SaveDetails()
     SyncDetails(aSync);
 
     // TODO: Mac version uses Application Support folder
-    Sexy::MkDir("userdata");
+    Sexy::MkDir(Sexy::GetAppDataFolder()+"userdata");
 
-    std::string aFileName = Sexy::StrFormat("userdata/user%d.dat", mId);
+    std::string aFileName = Sexy::StrFormat("%suserdata/user%d.dat", Sexy::GetAppDataFolder(), mId);
     gSexyAppBase->WriteBytesToFile(aFileName, aWriter.mMemoryHandle, aWriter.mMemoryPosition);
 }
 
@@ -166,7 +166,7 @@ void ProfileMgr::Load()
     // TODO: Mac version uses Application Support folder
     Buffer aBuf;
 
-    if (gSexyAppBase->ReadBufferFromFile("userdata/users.dat", &aBuf))
+    if (gSexyAppBase->ReadBufferFromFile(Sexy::GetAppDataFolder()+"userdata/users.dat", &aBuf))
     {
         DataReader aReader;
         aReader.OpenMemory((void *)aBuf.GetDataPtr(), aBuf.GetDataLen(), false);
@@ -185,7 +185,7 @@ void ProfileMgr::Save()
     SyncState(aSync);
 
     // TODO: Mac version uses Application Support folder
-    gSexyAppBase->WriteBytesToFile("userdata/users.dat", aWriter.mMemoryHandle, aWriter.mMemoryPosition);
+    gSexyAppBase->WriteBytesToFile(Sexy::GetAppDataFolder()+"userdata/users.dat", aWriter.mMemoryHandle, aWriter.mMemoryPosition);
 }
 
 UserProfile *ProfileMgr::GetProfile(const std::string &theName)

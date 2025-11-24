@@ -204,8 +204,8 @@ void CircleShootApp::Shutdown()
         }
 
 		
-		//if (mReadFromRegistry)
-		SexyAppBase::RegistryWriteString("CurUser",mProfile->mName);
+		if (SexyAppBase::mReadFromRegistry)
+			SexyAppBase::RegistryWriteString("CurUser",mProfile->mName);
 
         SexyAppBase::Shutdown();
     }

@@ -1,6 +1,7 @@
 #include "Zuma_Prefix.pch"
 
 #include <../SexyAppFramework/SexyAppBase.h>
+#include <../SexyAppFramework/Common.h>
 
 #include "DataSync.h"
 #include "HighScoreMgr.h"
@@ -49,7 +50,7 @@ void HighScoreMgr::Load()
     Clear();
     Buffer aBuffer;
 
-    if (!gSexyAppBase->ReadBufferFromFile("userdata/highscores.dat", &aBuffer))
+    if (!gSexyAppBase->ReadBufferFromFile(Sexy::GetAppDataFolder()+"userdata/highscores.dat", &aBuffer))
     {
         AddDefaults();
 		HighScoreSet hss = mHighScoreMap["e_spiral"];
@@ -73,8 +74,8 @@ void HighScoreMgr::Save()
     DataSync aSync(aWriter);
     SyncState(aSync);
 
-    Sexy::MkDir("userdata");
-    gSexyAppBase->WriteBytesToFile("userdata/highscores.dat", aWriter.mMemoryHandle, aWriter.mMemoryPosition);
+    Sexy::MkDir(Sexy::GetAppDataFolder()+"userdata");
+    gSexyAppBase->WriteBytesToFile(Sexy::GetAppDataFolder()+"userdata/highscores.dat", aWriter.mMemoryHandle, aWriter.mMemoryPosition);
 }
 
 void HighScoreMgr::Clear()

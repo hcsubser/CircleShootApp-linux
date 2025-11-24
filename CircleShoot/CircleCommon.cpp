@@ -1,5 +1,6 @@
 #include "Zuma_Prefix.pch"
 
+#include "../SexyAppFramework/Common.h"
 #include <../SexyAppFramework/misc/MTRand.h>
 #include <../SexyAppFramework/widget/ButtonListener.h>
 #include <../SexyAppFramework/widget/Dialog.h>
@@ -568,5 +569,5 @@ std::string Sexy::GetSaveGameName(bool practice, int userId)
     {
         aName = "adv";
     }
-    return Sexy::StrFormat("userdata/%s%d.sav", aName, userId);
+    return Sexy::StrFormat("%suserdata/%s%d.sav", Sexy::GetAppDataFolder().c_str(), aName, userId);
 }
