@@ -91,7 +91,7 @@ void UserProfile::DeleteUserFiles()
 
     gSexyAppBase->EraseFile(GetSaveGameName(false, mId));
     gSexyAppBase->EraseFile(GetSaveGameName(true, mId));
-    gSexyAppBase->EraseFile(Sexy::StrFormat("%suserdata/user%d.dat", Sexy::GetAppDataFolder(), mId));
+    gSexyAppBase->EraseFile(Sexy::StrFormat("%suserdata/user%d.dat", Sexy::GetAppDataFolder().c_str(), mId));
 }
 
 void UserProfile::LoadDetails()
@@ -100,7 +100,7 @@ void UserProfile::LoadDetails()
     Buffer aBuf;
 
     // yes, windows version used forward slashes
-    std::string aFileName = Sexy::StrFormat("%suserdata/user%d.dat", Sexy::GetAppDataFolder(), mId);
+    std::string aFileName = Sexy::StrFormat("%suserdata/user%d.dat", Sexy::GetAppDataFolder().c_str(), mId);
     if (gSexyAppBase->ReadBufferFromFile(aFileName, &aBuf))
     {
         DataReader aReader;
@@ -121,7 +121,7 @@ void UserProfile::SaveDetails()
     // TODO: Mac version uses Application Support folder
     Sexy::MkDir(Sexy::GetAppDataFolder()+"userdata");
 
-    std::string aFileName = Sexy::StrFormat("%suserdata/user%d.dat", Sexy::GetAppDataFolder(), mId);
+    std::string aFileName = Sexy::StrFormat("%suserdata/user%d.dat", Sexy::GetAppDataFolder().c_str(), mId);
     gSexyAppBase->WriteBytesToFile(aFileName, aWriter.mMemoryHandle, aWriter.mMemoryPosition);
 }
 

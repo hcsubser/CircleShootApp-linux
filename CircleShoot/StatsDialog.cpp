@@ -58,6 +58,8 @@ StatsDialog::StatsDialog(Board *theBoard, bool doCounter) : CircleDialog(Sexy::I
 
     if (mIsGameOver)
     {
+		mBoard->mApp->mHighScoreMgr->SubmitLowTime("spiral","testic", mBoard->mScore);
+		printf("\ntest aaaaaaaaaaaaaaa");fflush(stdout);
         mScore = mBoard->mScore;
         if (mIsWinning)
         {

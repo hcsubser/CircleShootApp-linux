@@ -386,6 +386,7 @@ void Board::DoLevelUp(bool playSounds, bool isCheat)
     {
         std::string aLvlString = GetUniqueLevelString();
         mApp->mHighScoreMgr->SubmitLowTime(aLvlString, mApp->mProfile->mName, mStateCount / 100);
+		//printf("\ntest %s %s",aLvlString.c_str(), mApp->mProfile->mName.c_str());
     }
 
     if (mNumClearsInARow > mLevelStats.mMaxInARow)
