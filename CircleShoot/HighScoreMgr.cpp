@@ -52,18 +52,20 @@ void HighScoreMgr::Load()
 
     if (!gSexyAppBase->ReadBufferFromFile(Sexy::GetAppDataFolder()+"userdata/highscores.dat", &aBuffer))
     {
+		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: 1");fflush(stdout);
         AddDefaults();
 		HighScoreSet hss = mHighScoreMap["e_spiral"];
 		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: %d",(hss.begin())->mScore);
 		fflush(stdout);
         return;
     }
-
+		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: 2");fflush(stdout);
     DataReader aReader;
     aReader.OpenMemory(aBuffer.GetDataPtr(), aBuffer.GetDataLen(), false);
-
+		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: 3");fflush(stdout);
     DataSync aSync(aReader);
     SyncState(aSync);
+		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: 4");fflush(stdout);
 }
 
 void HighScoreMgr::Save()
@@ -210,6 +212,7 @@ void HighScoreMgr::SyncState(DataSync &theSync)
             return;
 
         int aNumBoards = theSync.mReader->ReadShort();
+		printf("\n\n reader readshort anumboards: %d",aNumBoards);fflush(stdout);
         for (int i = 0; i < aNumBoards; i++)
         {
             std::string aBoard;
@@ -217,6 +220,7 @@ void HighScoreMgr::SyncState(DataSync &theSync)
             HighScoreSet &aSet = mHighScoreMap[aBoard];
 
             int aNumScores = theSync.mReader->ReadShort();
+		printf("\n\n reader readshort anumscores: %d",aNumScores);fflush(stdout);
             for (int j = 0; j < aNumScores; j++)
             {
                 HighScore aScore;
@@ -226,6 +230,7 @@ void HighScoreMgr::SyncState(DataSync &theSync)
         }
 
         int aNumTimes = theSync.mReader->ReadLong();
+		printf("\n\n reader readlong anumtimes: %d",aNumTimes);fflush(stdout);
         for (int i = 0; i < aNumTimes; i++)
         {
             std::string aBoard;
@@ -234,7 +239,46 @@ void HighScoreMgr::SyncState(DataSync &theSync)
             theSync.SyncString(aTime.mName);
             theSync.SyncLong(aTime.mTime);
         }
-    }
+    } /*else {
+        int aNumBoards = mHighScoreMap.size();
+		theSync.mWriter->WriteShort((int &) aNumBoards);
+		printf("\n\n writer writeshort anumboards: %d",aNumBoards);fflush(stdout);
+        //for (int i = 0; i < aNumBoards; i++)
+        //{
+        //    std::string aBoard;
+        //    theSync.SyncString(aBoard);
+        //    HighScoreSet &aSet = mHighScoreMap[aBoard];
+
+        //    int aNumScores = theSync.mReader->ReadShort();
+		//printf("\n\n reader readshort anumscores: %d",aNumScores);fflush(stdout);
+        //    for (int j = 0; j < aNumScores; j++)
+        //    {
+        //        HighScore aScore;
+        //        aScore.SyncState(theSync);
+        //        aSet.insert(aScore);
+        //    }
+        //}
+		for(HighScoreMap::iterator iter = mHighScoreMap.begin(); iter != mHighScoreMap.end(); ++iter)
+		{
+			std::string s = iter->first;
+			theSync.SyncString(s);
+            int aNumScores = iter->second.size();
+			for(HighScoreMap::iterator iter2 = myMap2.begin(); iter2 != myMap.end(); ++iter2){
+			
+			}
+		}
+
+        int aNumTimes = theSync.mReader->ReadLong();
+		//printf("\n\n reader readlong anumtimes: %d",aNumTimes);fflush(stdout);
+        for (int i = 0; i < aNumTimes; i++)
+        {
+            std::string aBoard;
+            theSync.SyncString(aBoard);
+            LowTime &aTime = mLowTimeMap[aBoard];
+            theSync.SyncString(aTime.mName);
+            theSync.SyncLong(aTime.mTime);
+        }
+	}*/
 }
 
 const HighScoreSet &HighScoreMgr::GetHighScores(const std::string &theLevelStr)

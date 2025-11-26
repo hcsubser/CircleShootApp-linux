@@ -10,6 +10,7 @@
 #include "CircleDialog.h"
 #include "CircleShootApp.h"
 #include "HighScoreMgr.h"
+#include "ProfileMgr.h"
 #include "StatsDialog.h"
 #include "SoundMgr.h"
 #include "Res.h"
@@ -58,9 +59,20 @@ StatsDialog::StatsDialog(Board *theBoard, bool doCounter) : CircleDialog(Sexy::I
 
     if (mIsGameOver)
     {
-		mBoard->mApp->mHighScoreMgr->SubmitLowTime("spiral","testic", mBoard->mScore);
-		printf("\ntest aaaaaaaaaaaaaaa");fflush(stdout);
         mScore = mBoard->mScore;
+
+		//if(GetCircleShootApp()->mProfile != NULL){ //not needed??
+		HighScore* hs = new HighScore();
+		hs->mName = GetCircleShootApp()->mProfile->mName;
+		hs->mScore = mScore;
+		if(mBoard->mIsEndless)
+			mBoard->mApp->mHighScoreMgr->SubmitScore("e_"+mBoard->mLevelDesc->mName, *hs,false);
+		else
+			mBoard->mApp->mHighScoreMgr->SubmitScore(mBoard->mLevelDesc->mName, *hs,false);
+		delete(hs);
+		//printf("\ntest aaaaaaaaaaaaaaa %s %d %s",mBoard->mLevelDesc->mName.c_str(),mScore,GetCircleShootApp()->mProfile->mName.c_str());fflush(stdout);
+		//}
+
         if (mIsWinning)
         {
             mDialogHeader = "WINNING TOTALS";

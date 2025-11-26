@@ -31,36 +31,36 @@ OptionsDialog::OptionsDialog(bool inMainMenu) : CircleDialog(Sexy::IMAGE_DIALOG_
     mSfxVolumeSlider->SetValue(gSexyAppBase->GetSfxVolume());
 
     mFullScreenCheckbox = MakeCheckbox(2, this);
-    mCustomCursorsCheckbox = MakeCheckbox(3, this);
-    m3DAccelCheckbox = MakeCheckbox(4, this);
+    //mCustomCursorsCheckbox = MakeCheckbox(3, this);
+    //m3DAccelCheckbox = MakeCheckbox(4, this);
 
     mButtonHelp = MakeButton(5, this, "Help", CircleButton::CB_ClickSound, NULL, 3);
-    mButtonUpdates = MakeButton(6, this, "Check For Updates", CircleButton::CB_ClickSound, NULL, 3);
-    mButtonRegister = MakeButton(7, this, "Register", CircleButton::CB_ClickSound, NULL, 3);
+    //mButtonUpdates = MakeButton(6, this, "Check For Updates", CircleButton::CB_ClickSound, NULL, 3);
+    //mButtonRegister = MakeButton(7, this, "Register", CircleButton::CB_ClickSound, NULL, 3);
     mButtonBack = MakeButton(8, this, "Back To Main Menu", CircleButton::CB_ClickSound, NULL, 3);
 
     mFullScreenCheckbox->mChecked = !gSexyAppBase->mIsWindowed;
-    mCustomCursorsCheckbox->mChecked = gSexyAppBase->mCustomCursorsEnabled;
-    m3DAccelCheckbox->mChecked = gSexyAppBase->Is3DAccelerated();
+    //mCustomCursorsCheckbox->mChecked = gSexyAppBase->mCustomCursorsEnabled;
+    //m3DAccelCheckbox->mChecked = gSexyAppBase->Is3DAccelerated();
     mButtonBack->SetVisible(inMainMenu);
 
     // if (gSexyAppBase->mDontUpdate)
-    if (true) // todo
-    {
-        mButtonUpdates->SetVisible(false);
-    }
+    //if (true) // todo
+    //{
+    //    mButtonUpdates->SetVisible(false);
+    //}
 
     // if (gSexyAppBase->mMaybeNoRegistration)
-    if (true)
-    {
-        mButtonRegister->SetVisible(false);
-    }
+    //if (true)
+    //{
+    //    mButtonRegister->SetVisible(false);
+    //}
 
     mExtraHeight = 200;
-    if (mButtonUpdates->mVisible)
-    {
-        mExtraHeight = 250;
-    }
+    //if (mButtonUpdates->mVisible)
+    //{
+    //    mExtraHeight = 250;
+    //}
 
     if (mButtonBack->mVisible)
     {
@@ -83,28 +83,28 @@ void OptionsDialog::Resize(int theX, int theY, int theWidth, int theHeight)
     mMusicVolumeSlider->Resize(left + 130, top - 15, width - 130, 36);
     mSfxVolumeSlider->Layout(LAY_SameLeft | LAY_Below | LAY_SameSize, mMusicVolumeSlider, 0, 0, 0, 0);
     mFullScreenCheckbox->Layout(LAY_Below | LAY_SetLeft, mSfxVolumeSlider, left, 0, 0, 0);
-    mCustomCursorsCheckbox->Layout(LAY_SameTop | LAY_Right, mFullScreenCheckbox, 90, 0, 0, 0);
-    m3DAccelCheckbox->Layout(LAY_SameLeft | LAY_Below, mFullScreenCheckbox, 0, 0, 0, 0);
+    //mCustomCursorsCheckbox->Layout(LAY_SameTop | LAY_Right, mFullScreenCheckbox, 90, 0, 0, 0);
+    //m3DAccelCheckbox->Layout(LAY_SameLeft | LAY_Below, mFullScreenCheckbox, 0, 0, 0, 0);
 
-    if (mButtonRegister->mVisible)
-    {
-        mButtonHelp->Layout(LAY_SameLeft | LAY_Below | LAY_SetWidth, m3DAccelCheckbox, 0, 0, width / 2, 0);
-        mButtonRegister->Layout(LAY_SameTop | LAY_Right | LAY_SameSize, mButtonHelp, 0, 0, width, 0);
-    }
-    else
-    {
-        mButtonHelp->Layout(LAY_SameLeft | LAY_Below | LAY_SetWidth, m3DAccelCheckbox, 0, 0, width, 0);
-    }
+    //if (mButtonRegister->mVisible)
+    //{
+    //    mButtonHelp->Layout(LAY_SameLeft | LAY_Below | LAY_SetWidth, m3DAccelCheckbox, 0, 0, width / 2, 0);
+    //    mButtonRegister->Layout(LAY_SameTop | LAY_Right | LAY_SameSize, mButtonHelp, 0, 0, width, 0);
+    //}
+    //else
+    //{
+        mButtonHelp->Layout(LAY_SameLeft | LAY_Below | LAY_SetWidth, mFullScreenCheckbox, 0, top/4, width, 0);
+    //}
 
-    if (mButtonUpdates->mVisible)
-    {
-        mButtonUpdates->Layout(LAY_SameLeft | LAY_Below | LAY_SetWidth, mButtonHelp, 0, 0, width, 0);
-        mButtonBack->Layout(LAY_SameLeft | LAY_Below | LAY_SameSize, mButtonUpdates, 0, 0, 0, 0);
-    }
-    else
-    {
+    //if (mButtonUpdates->mVisible)
+    //{
+    //    mButtonUpdates->Layout(LAY_SameLeft | LAY_Below | LAY_SetWidth, mButtonHelp, 0, 0, width, 0);
+    //    mButtonBack->Layout(LAY_SameLeft | LAY_Below | LAY_SameSize, mButtonUpdates, 0, 0, 0, 0);
+    //}
+    //else
+    //{
         mButtonBack->Layout(LAY_SameLeft | LAY_Below | LAY_SetWidth, mButtonHelp, 0, 0, width, 0);
-    }
+    //}
 }
 
 int OptionsDialog::GetPreferredHeight(int theWidth)
@@ -119,12 +119,12 @@ void OptionsDialog::AddedToManager(WidgetManager *theWidgetManager)
     theWidgetManager->AddWidget(mMusicVolumeSlider);
     theWidgetManager->AddWidget(mSfxVolumeSlider);
     theWidgetManager->AddWidget(mFullScreenCheckbox);
-    theWidgetManager->AddWidget(mCustomCursorsCheckbox);
-    theWidgetManager->AddWidget(m3DAccelCheckbox);
+    //theWidgetManager->AddWidget(mCustomCursorsCheckbox);
+    //theWidgetManager->AddWidget(m3DAccelCheckbox);
     theWidgetManager->AddWidget(mButtonHelp);
-    theWidgetManager->AddWidget(mButtonRegister);
+    //theWidgetManager->AddWidget(mButtonRegister);
     theWidgetManager->AddWidget(mButtonBack);
-    theWidgetManager->AddWidget(mButtonUpdates);
+    //theWidgetManager->AddWidget(mButtonUpdates);
 }
 
 void OptionsDialog::RemovedFromManager(WidgetManager *theWidgetManager)
@@ -133,11 +133,11 @@ void OptionsDialog::RemovedFromManager(WidgetManager *theWidgetManager)
     theWidgetManager->RemoveWidget(mMusicVolumeSlider);
     theWidgetManager->RemoveWidget(mSfxVolumeSlider);
     theWidgetManager->RemoveWidget(mFullScreenCheckbox);
-    theWidgetManager->RemoveWidget(mCustomCursorsCheckbox);
-    theWidgetManager->RemoveWidget(m3DAccelCheckbox);
+    //theWidgetManager->RemoveWidget(mCustomCursorsCheckbox);
+    //theWidgetManager->RemoveWidget(m3DAccelCheckbox);
     theWidgetManager->RemoveWidget(mButtonHelp);
-    theWidgetManager->RemoveWidget(mButtonRegister);
-    theWidgetManager->RemoveWidget(mButtonUpdates);
+    //theWidgetManager->RemoveWidget(mButtonRegister);
+    //theWidgetManager->RemoveWidget(mButtonUpdates);
     theWidgetManager->RemoveWidget(mButtonBack);
 }
 
@@ -154,8 +154,8 @@ void OptionsDialog::Draw(Graphics *g)
     g->DrawString("Sound Effects", aPosX, mSfxVolumeSlider->mY - mY + FONT_DIALOG->GetAscent() + 5);
 
     DrawCheckboxText(g, "Fullscreen", mFullScreenCheckbox);
-    DrawCheckboxText(g, "Custom Cursors", mCustomCursorsCheckbox);
-    DrawCheckboxText(g, "    3-D Hardware Acceleration          ", m3DAccelCheckbox);
+    //DrawCheckboxText(g, "Custom Cursors", mCustomCursorsCheckbox);
+    //DrawCheckboxText(g, "    3-D Hardware Acceleration          ", m3DAccelCheckbox);
 }
 
 void OptionsDialog::ButtonPress(int theId)
@@ -210,7 +210,7 @@ void OptionsDialog::CheckboxChecked(int theId, bool checked)
             mFullScreenCheckbox->mChecked = true;
         }
     }
-    else if (theId == 4 && checked)
+    /*else if (theId == 4 && checked)
     {
         if (gSexyAppBase->Is3DAccelerationSupported())
         {
@@ -230,5 +230,5 @@ void OptionsDialog::CheckboxChecked(int theId, bool checked)
                                    "Your video card does not meet the minimum requirements for this game.",
                                    "OK", BUTTONS_FOOTER);
         }
-    }
+    }*/
 }

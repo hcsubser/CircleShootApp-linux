@@ -1016,10 +1016,10 @@ void CircleShootApp::FinishOptionsDialog(bool saveSettings)
         if (saveSettings)
         {
             bool fullscreen = dialog->mFullScreenCheckbox->IsChecked();
-            bool acceleration = dialog->m3DAccelCheckbox->IsChecked();
-            SwitchScreenMode(fullscreen != true, acceleration);
-            bool cursorsEnabled = dialog->mCustomCursorsCheckbox->IsChecked();
-            EnableCustomCursors(cursorsEnabled);
+            //bool acceleration = dialog->m3DAccelCheckbox->IsChecked();
+            SwitchScreenMode(fullscreen != true, true);
+            //bool cursorsEnabled = dialog->mCustomCursorsCheckbox->IsChecked();
+            EnableCustomCursors(false);
             ClearUpdateBacklog();
         }
 
