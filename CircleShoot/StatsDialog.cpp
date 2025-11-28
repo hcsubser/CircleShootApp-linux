@@ -61,17 +61,17 @@ StatsDialog::StatsDialog(Board *theBoard, bool doCounter) : CircleDialog(Sexy::I
     {
         mScore = mBoard->mScore;
 
-		//if(GetCircleShootApp()->mProfile != NULL){ //not needed??
 		HighScore* hs = new HighScore();
 		hs->mName = GetCircleShootApp()->mProfile->mName;
 		hs->mScore = mScore;
-		if(mBoard->mIsEndless)
+
+		if(GetCircleShootApp()->mIsPractice == false)
+			mBoard->mApp->mHighScoreMgr->SubmitScore("adventure", *hs,false);
+		else if(mBoard->mIsEndless)
 			mBoard->mApp->mHighScoreMgr->SubmitScore("e_"+mBoard->mLevelDesc->mName, *hs,false);
 		else
 			mBoard->mApp->mHighScoreMgr->SubmitScore(mBoard->mLevelDesc->mName, *hs,false);
-		delete(hs);
-		//printf("\ntest aaaaaaaaaaaaaaa %s %d %s",mBoard->mLevelDesc->mName.c_str(),mScore,GetCircleShootApp()->mProfile->mName.c_str());fflush(stdout);
-		//}
+		delete hs;
 
         if (mIsWinning)
         {
