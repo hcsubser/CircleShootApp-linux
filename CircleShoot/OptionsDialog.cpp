@@ -62,10 +62,10 @@ OptionsDialog::OptionsDialog(bool inMainMenu) : CircleDialog(Sexy::IMAGE_DIALOG_
     //    mExtraHeight = 250;
     //}
 
-    if (mButtonBack->mVisible)
+    /*if (mButtonBack->mVisible)
     {
         mExtraHeight += 50;
-    }
+    }*/
 }
 
 OptionsDialog::~OptionsDialog()
@@ -93,7 +93,10 @@ void OptionsDialog::Resize(int theX, int theY, int theWidth, int theHeight)
     //}
     //else
     //{
+	if(!mButtonBack->mVisible)
         mButtonHelp->Layout(LAY_SameLeft | LAY_Below | LAY_SetWidth, mFullScreenCheckbox, 0, top/4, width, 0);
+	else
+        mButtonHelp->Layout(LAY_SameLeft | LAY_Below | LAY_SetWidth, mFullScreenCheckbox, 0, 0, width, 0);
     //}
 
     //if (mButtonUpdates->mVisible)

@@ -22,7 +22,6 @@ public:
 	int mScore;
 
 	HighScore();
-	void SyncState(DataSync &theSync) const;	// not really const, see code
 
 	bool operator<(const HighScore &h) const { return mScore > h.mScore; }
 	bool operator!=(const HighScore &h) const { return mScore != h.mScore; }
@@ -50,7 +49,6 @@ protected:
 	LowTimeMap mLowTimeMap;
 
 	void CapSize(HighScoreSet &theSet, int theSize);
-	void SyncState(DataSync &theSync);
 	void ClearEmptyScores();
 	void AddDefaults();
 

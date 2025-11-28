@@ -6,6 +6,10 @@
 #include "DataSync.h"
 #include "HighScoreMgr.h"
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
 using namespace Sexy;
 
 int gHighScoreVersion = 1;
@@ -28,12 +32,6 @@ HighScore::HighScore() : mScore(0)
 {
 }
 
-void HighScore::SyncState(DataSync &theSync) const
-{
-    theSync.SyncString((std::string &)mName);
-    theSync.SyncLong((int &)mScore);
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -52,32 +50,42 @@ void HighScoreMgr::Load()
 
     if (!gSexyAppBase->ReadBufferFromFile(Sexy::GetAppDataFolder()+"userdata/highscores.dat", &aBuffer))
     {
-		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: 1");fflush(stdout);
         AddDefaults();
-		HighScoreSet hss = mHighScoreMap["e_spiral"];
-		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: %d",(hss.begin())->mScore);
-		fflush(stdout);
         return;
     }
-		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: 2");fflush(stdout);
-    DataReader aReader;
-    aReader.OpenMemory(aBuffer.GetDataPtr(), aBuffer.GetDataLen(), false);
-		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: 3");fflush(stdout);
-    DataSync aSync(aReader);
-    SyncState(aSync);
-		printf("(Debug)<CircleShoot/HighScoreMgr.cpp> HighScore: 4");fflush(stdout);
+
+	std::fstream filein(Sexy::GetAppDataFolder()+"userdata/highscores.dat", std::ios::in);
+
+    for (std::string line; std::getline(filein, line);)
+	{
+		std::stringstream test(line);
+		std::string segment;
+		std::vector<std::string> seglist;
+
+		while(std::getline(test, segment, ';'))
+   			seglist.push_back(segment);
+
+		HighScore hs;
+		hs.mName = seglist[1];
+		hs.mScore = stoi(seglist[2]);
+		mHighScoreMap[seglist[0]].insert(hs);
+	}
+	filein.close();
 }
 
 void HighScoreMgr::Save()
 {
-    DataWriter aWriter;
-    aWriter.OpenMemory(32);
+	std::fstream fileout(Sexy::GetAppDataFolder()+"userdata/highscores.dat", std::ios::out);
 
-    DataSync aSync(aWriter);
-    SyncState(aSync);
-
-    Sexy::MkDir(Sexy::GetAppDataFolder()+"userdata");
-    gSexyAppBase->WriteBytesToFile(Sexy::GetAppDataFolder()+"userdata/highscores.dat", aWriter.mMemoryHandle, aWriter.mMemoryPosition);
+    int aNam = 0;
+	for (auto  hs : mHighScoreMap)
+	{
+        for (auto  hss : mHighScoreMap[hs.first])
+        {
+			fileout << hs.first << ";" << hss.mName << ";" << hss.mScore << std::endl;
+        }
+    }
+	fileout.close();
 }
 
 void HighScoreMgr::Clear()
@@ -199,88 +207,6 @@ void HighScoreMgr::AddDefaults()
     }
 }
 
-void HighScoreMgr::SyncState(DataSync &theSync)
-{
-    int aVersion = gHighScoreVersion;
-    theSync.SyncLong(aVersion);
-    theSync.mVersion = aVersion;
-
-    if (theSync.mReader)
-    {
-        Clear();
-        if (aVersion != gHighScoreVersion)
-            return;
-
-        int aNumBoards = theSync.mReader->ReadShort();
-		printf("\n\n reader readshort anumboards: %d",aNumBoards);fflush(stdout);
-        for (int i = 0; i < aNumBoards; i++)
-        {
-            std::string aBoard;
-            theSync.SyncString(aBoard);
-            HighScoreSet &aSet = mHighScoreMap[aBoard];
-
-            int aNumScores = theSync.mReader->ReadShort();
-		printf("\n\n reader readshort anumscores: %d",aNumScores);fflush(stdout);
-            for (int j = 0; j < aNumScores; j++)
-            {
-                HighScore aScore;
-                aScore.SyncState(theSync);
-                aSet.insert(aScore);
-            }
-        }
-
-        int aNumTimes = theSync.mReader->ReadLong();
-		printf("\n\n reader readlong anumtimes: %d",aNumTimes);fflush(stdout);
-        for (int i = 0; i < aNumTimes; i++)
-        {
-            std::string aBoard;
-            theSync.SyncString(aBoard);
-            LowTime &aTime = mLowTimeMap[aBoard];
-            theSync.SyncString(aTime.mName);
-            theSync.SyncLong(aTime.mTime);
-        }
-    } /*else {
-        int aNumBoards = mHighScoreMap.size();
-		theSync.mWriter->WriteShort((int &) aNumBoards);
-		printf("\n\n writer writeshort anumboards: %d",aNumBoards);fflush(stdout);
-        //for (int i = 0; i < aNumBoards; i++)
-        //{
-        //    std::string aBoard;
-        //    theSync.SyncString(aBoard);
-        //    HighScoreSet &aSet = mHighScoreMap[aBoard];
-
-        //    int aNumScores = theSync.mReader->ReadShort();
-		//printf("\n\n reader readshort anumscores: %d",aNumScores);fflush(stdout);
-        //    for (int j = 0; j < aNumScores; j++)
-        //    {
-        //        HighScore aScore;
-        //        aScore.SyncState(theSync);
-        //        aSet.insert(aScore);
-        //    }
-        //}
-		for(HighScoreMap::iterator iter = mHighScoreMap.begin(); iter != mHighScoreMap.end(); ++iter)
-		{
-			std::string s = iter->first;
-			theSync.SyncString(s);
-            int aNumScores = iter->second.size();
-			for(HighScoreMap::iterator iter2 = myMap2.begin(); iter2 != myMap.end(); ++iter2){
-			
-			}
-		}
-
-        int aNumTimes = theSync.mReader->ReadLong();
-		//printf("\n\n reader readlong anumtimes: %d",aNumTimes);fflush(stdout);
-        for (int i = 0; i < aNumTimes; i++)
-        {
-            std::string aBoard;
-            theSync.SyncString(aBoard);
-            LowTime &aTime = mLowTimeMap[aBoard];
-            theSync.SyncString(aTime.mName);
-            theSync.SyncLong(aTime.mTime);
-        }
-	}*/
-}
-
 const HighScoreSet &HighScoreMgr::GetHighScores(const std::string &theLevelStr)
 {
     return mHighScoreMap[theLevelStr];
@@ -291,7 +217,7 @@ bool HighScoreMgr::SubmitScore(const std::string &theBoard, const HighScore &the
     HighScoreSet &aSet = mHighScoreMap[theBoard];
     HighScoreSet::iterator anItr = aSet.insert(theScore);
 
-    if (aSet.size() <= 10)
+/*    if (aSet.size() <= 3) //was 10, but I think only 3 show up in the game though
     {
         if (needLoad)
         {
@@ -299,7 +225,7 @@ bool HighScoreMgr::SubmitScore(const std::string &theBoard, const HighScore &the
             return SubmitScore(theBoard, theScore, false);
         }
 
-        Save();
+        //Save();
         return true;
     }
 
@@ -324,10 +250,10 @@ bool HighScoreMgr::SubmitScore(const std::string &theBoard, const HighScore &the
     {
         Load();
         return SubmitScore(theBoard, theScore, false);
-    }
+    }*/
 
-    CapSize(aSet, 10);
-    Save();
+    CapSize(aSet, 3);
+	Save();
     return true;
 }
 

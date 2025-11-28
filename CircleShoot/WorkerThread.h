@@ -22,6 +22,7 @@ namespace Sexy
 		void (*mTaskProc)(void *);
 		void *mParam;
 		bool mShutdown;
+		pthread_t *mThread;
 
 		WorkerThread();
 
