@@ -65,6 +65,17 @@ StatsDialog::StatsDialog(Board *theBoard, bool doCounter) : CircleDialog(Sexy::I
 		hs->mName = GetCircleShootApp()->mProfile->mName;
 		hs->mScore = mScore;
 
+        if (mIsWinning)
+        {
+            mDialogHeader = "WINNING TOTALS";
+            mTargetTimeBonus = 50000 * mBoard->mLives;
+			hs->mScore += mTargetTimeBonus;
+        }
+        else
+        {
+            mDialogHeader = "GAME OVER";
+        }
+
 		if(GetCircleShootApp()->mIsPractice == false)
 			mBoard->mApp->mHighScoreMgr->SubmitScore("adventure", *hs,false);
 		else if(mBoard->mIsEndless)
@@ -72,16 +83,6 @@ StatsDialog::StatsDialog(Board *theBoard, bool doCounter) : CircleDialog(Sexy::I
 		else
 			mBoard->mApp->mHighScoreMgr->SubmitScore(mBoard->mLevelDesc->mName, *hs,false);
 		delete hs;
-
-        if (mIsWinning)
-        {
-            mDialogHeader = "WINNING TOTALS";
-            mTargetTimeBonus = 50000 * mBoard->mLives;
-        }
-        else
-        {
-            mDialogHeader = "GAME OVER";
-        }
 
         mCurrentTip = aGameOverTexts[rand() % 8];
     }
